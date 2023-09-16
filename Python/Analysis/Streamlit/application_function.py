@@ -33,4 +33,4 @@ def pca_maker(df):
   
   output = pd.concat([df, pca_df], axis=1)
   
-  return output, categorical_col_lst, pca_columns
+  return output, categorical_df.columns, pca_columns
