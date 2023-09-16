@@ -5,7 +5,7 @@ from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler
 import numpy as np
 
-def pca(df):
+def pca_maker(df):
   numeric_col_lst = []
   categorical_col_lst = []
   
@@ -24,9 +24,13 @@ def pca(df):
   scaler_obj = StandardScaler()
   scaled_values = scaler_obj.fit_transform(new_numeric_df)
   
+  pca_columns = ["PCA_" + str(x+1) for x in range(0, 24)]
+  
   pca = PCA()
   pca_data = pca.fit_transform(scaled_values)
   pca_df = pd.DataFrame(pca_data)
   pca_df.rename(columns={x:"PCA_" + str(x+1) for x in range(0, 24)}, inplace=True)
   
   output = pd.concat([df, pca_df], axis=1)
+  
+  return output, categorical_col_lst, pca_columns
