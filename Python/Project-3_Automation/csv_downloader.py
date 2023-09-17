@@ -5,7 +5,7 @@ from datetime import datetime  # Import datetime for timestamp
 
 url = "https://www.football-data.co.uk/englandm.php"
 
-download_folder = r"C:\Users\ankit\OneDrive\Desktop\Data Analysis\Football-CSV"
+download_folder = r"C:\\Users\\ankit\\OneDrive\\Desktop\\Dev\\Data-Analysis\\Python\\Project-3_Automation\\Football-CSV"
 
 if not os.path.exists(download_folder):
     os.makedirs(download_folder)
@@ -16,15 +16,24 @@ if response.status_code == 200:
     soup = BeautifulSoup(response.content, 'html.parser')
 
     links = soup.find_all('a')
+    seasons = soup.find_all('i')
+    new_seasons = []
     
+    for i in seasons:
+        new_seasons.append(str(i))
+        
+    final_seasons = []     
+    for i in new_seasons:
+        final_seasons.append(i[10:-4]) 
+        
     csv_links = [link.get('href') for link in links if link.get('href').endswith('.csv')]
     
-    for csv_link in csv_links:
+    for season_name , csv_link in zip(final_seasons, csv_links):
         full_csv_url = url + csv_link
         
         # Generate a unique file name using a timestamp
-        timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
-        file_name = f"{os.path.basename(csv_link).split('.')[0]}_{timestamp}.csv"
+        
+        file_name = f"{season_name}_{os.path.basename(csv_link).split('.')[0]}.csv"
         
         file_path = os.path.join(download_folder, file_name)
         
